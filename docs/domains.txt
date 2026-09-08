@@ -1,0 +1,19 @@
+
+Identity	
+    Authentication + permissions
+
+Restaurant	
+    Areas + roles
+    
+Users	
+    Employees + availability
+    
+Requirements	
+    What staffing is needed
+    
+Scheduling	
+    Build/publish schedules
+    
+Communication	
+    Manager ↔ employee messages
+    

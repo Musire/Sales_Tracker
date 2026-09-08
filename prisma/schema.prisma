@@ -1,0 +1,330 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  MANAGER
+  END_USER
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  DISABLED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+enum ScheduleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id String @id @default(uuid())
+
+  // Supabase Auth UUID.
+  // Null until the EndUser accepts their invitation and creates an account.
+  authUserId String? @unique
+
+  email     String  @unique
+  name      String  @unique
+  avatarUrl String?
+
+  // Application-level role.
+  role   UserRole
+  status UserStatus @default(PENDING)
+
+  // Hourly pay rate for EndUsers.
+  payRate Decimal? @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --------------------------------------------------
+  // Restaurant scheduling
+  // --------------------------------------------------
+
+  areaRoles UserAreaRole[]
+
+  shifts Shift[]
+
+  // Employee availability
+  availability UserAvailability[]
+
+  // --------------------------------------------------
+  // Invitations
+  // --------------------------------------------------
+
+  invitationsSent Invitation[] @relation("InvitationSender")
+
+  invitation Invitation? @relation("UserInvitation")
+
+  // --------------------------------------------------
+  // Communication
+  // --------------------------------------------------
+
+  managerConversations Conversation[] @relation("ManagerConversations")
+
+  endUserConversations Conversation[] @relation("EndUserConversations")
+
+  sentMessages Message[]
+
+  @@index([role])
+  @@index([status])
+  @@index([email])
+}
+
+model Invitation {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  invitedById String
+
+  email String
+
+  status     InvitationStatus @default(PENDING)
+  expiresAt  DateTime
+  acceptedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Pending/registered EndUser this invitation belongs to.
+  user User @relation("UserInvitation", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Manager who created the invitation.
+  invitedBy User @relation("InvitationSender", fields: [invitedById], references: [id])
+
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
+  @@index([invitedById])
+}
+
+model Area {
+  id String @id @default(uuid())
+
+  name   String
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Roles available in this area.
+  roles Role[]
+
+  // Employee assignments through roles.
+  userAreaRoles UserAreaRole[]
+
+  // Scheduled shifts.
+  shifts Shift[]
+
+  // Staffing requirements.
+  coverageRequirements CoverageRequirement[]
+
+  @@unique([name])
+  @@index([active])
+}
+
+model Role {
+  id String @id @default(uuid())
+
+  areaId String
+
+  name   String
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  area Area @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  // Employees who can work this role.
+  userAreaRoles UserAreaRole[]
+
+  // Staffing requirements for this role.
+  coverageRequirements CoverageRequirement[]
+
+  // Shifts assigned to this role.
+  shifts Shift[]
+
+  @@unique([areaId, name])
+  @@index([areaId])
+  @@index([active])
+}
+
+model UserAreaRole {
+  id String @id @default(uuid())
+
+  userId String
+  areaId String
+  roleId String
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  area Area @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, areaId, roleId])
+  @@index([userId])
+  @@index([areaId])
+  @@index([roleId])
+}
+
+model UserAvailability {
+  id String @id @default(uuid())
+
+  userId String
+
+  // 0 = Sunday
+  // 1 = Monday
+  // ...
+  // 6 = Saturday
+  dayOfWeek Int
+
+  startsAt DateTime
+  endsAt   DateTime
+
+  available Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dayOfWeek])
+}
+
+model CoverageRequirement {
+  id String @id @default(uuid())
+
+  areaId String
+  roleId String
+
+  // 0 = Sunday
+  // 1 = Monday
+  // ...
+  // 6 = Saturday
+  dayOfWeek Int
+
+  startsAt DateTime
+  endsAt   DateTime
+
+  // Number of employees needed for this role.
+  requiredUsers Int
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  area Area @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([areaId, dayOfWeek])
+  @@index([roleId, dayOfWeek])
+  @@index([active])
+}
+
+model Schedule {
+  id String @id @default(uuid())
+
+  // Start of the business week represented by this schedule.
+  weekStart DateTime @unique
+
+  status ScheduleStatus @default(DRAFT)
+
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  shifts Shift[]
+
+  // Exactly one schedule per week.
+  @@index([status])
+}
+
+model Shift {
+  id String @id @default(uuid())
+
+  scheduleId String
+  userId     String
+  areaId     String
+  roleId     String
+
+  shiftDate DateTime
+  startsAt  DateTime
+  endsAt    DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+  area     Area     @relation(fields: [areaId], references: [id])
+  role     Role     @relation(fields: [roleId], references: [id])
+
+  @@index([scheduleId])
+  @@index([userId])
+  @@index([areaId])
+  @@index([roleId])
+  @@index([startsAt, endsAt])
+}
+
+model Conversation {
+  id String @id @default(uuid())
+
+  // Exactly one Manager.
+  managerId String
+
+  // Exactly one EndUser.
+  endUserId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  manager User @relation("ManagerConversations", fields: [managerId], references: [id])
+  endUser User @relation("EndUserConversations", fields: [endUserId], references: [id])
+
+  messages Message[]
+
+  // One conversation per Manager + EndUser pair.
+  @@unique([managerId, endUserId])
+  @@index([managerId])
+  @@index([endUserId])
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  conversationId String
+  senderId       String
+
+  body String
+
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+}
