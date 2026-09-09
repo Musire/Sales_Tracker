@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  allowedDevOrigins: ['192.168.1.72'], // Allows your phone to safely talk to your dev server
 };
 
-export default nextConfig;
+module.exports = {
+  allowedDevOrigins: ['192.168.1.72'],
+}

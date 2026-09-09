@@ -1,20 +1,16 @@
 import type { LucideIcon } from 'lucide-react'
 import {
-    CalendarCheck2,
-    LayoutGrid,
-    MessageSquare,
-    Users,
-    Plus,
+    Briefcase,
+    DraftingCompass,
+    Home,
     UserShield
 } from 'lucide-react'
 
 export const iconMap = {
-    schedule: CalendarCheck2,
-    manage: LayoutGrid,
-    users: Users,
-    plus: Plus,
+    home: Home,
+    architects: DraftingCompass,
+    companies: Briefcase,
     account: UserShield,
-    messages: MessageSquare
 } as const
 
 export type IconKey = keyof typeof iconMap

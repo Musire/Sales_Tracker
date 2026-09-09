@@ -3,6 +3,8 @@
 import { supabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient, createSupabaseServerClientReadOnly } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { createSafeAction, validateFormData } from "../auth/safeAction";
+import { loginSchema } from "../validations/login.validations";
 
 export async function logout() {
 
@@ -19,7 +21,24 @@ export async function logout() {
 export type FormState = { success: boolean, error: string | null }
 
 
-export async function login(
+export const login = async (_: any, formData: FormData) => {
+    const validated = validateFormData(loginSchema, formData)
+    const supabase = createSupabaseServerClient()
+    const { error } = await supabase.auth.signInWithPassword({
+      email: validated.email,
+      password: validated.password,
+    })
+    
+    if (error) throw new Error('supabase error thrown')
+    
+    return {
+      success: true,
+      data: { user: 'test'},
+      error: null
+    }
+}
+
+export async function etest(
   _: any, 
   formData: FormData
 ) {

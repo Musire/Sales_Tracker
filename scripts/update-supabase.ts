@@ -23,11 +23,11 @@ async function updateSupabaseMetadata() {
   await supabaseAdminClient.auth.admin.updateUserById(user.id, {
     user_metadata: {
       ...user.user_metadata,
-      role: "MANAGER", // Adds/updates the role in user_metadata
+      role: "ADMIN", // Adds/updates the role in user_metadata
     },
   });
 
-  console.log("Successfully updated Supabase Auth user_metadata with role: MANAGER");
+  console.log("Successfully updated Supabase Auth user_metadata with role: ADMIN");
 }
 
 updateSupabaseMetadata()

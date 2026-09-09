@@ -13,7 +13,7 @@ async function updateManagerRole() {
 
   const updatedUser = await prisma.user.update({
     where: { email },
-    data: { role: "MANAGER" },
+    data: { role: "ADMIN" },
   });
 
   console.log(`Successfully updated user ${updatedUser.email} to role: ${updatedUser.role}`);

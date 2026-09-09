@@ -10,7 +10,8 @@
 */
 
 export const UserRole = {
-  MANAGER: 'MANAGER',
+  ADMIN: 'ADMIN',
+  ARCHITECT: 'ARCHITECT',
   END_USER: 'END_USER'
 } as const
 
@@ -26,6 +27,16 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const SaleStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  CLOSED: 'CLOSED',
+  DELIVERED: 'DELIVERED'
+} as const
+
+export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
+
+
 export const InvitationStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -34,11 +45,3 @@ export const InvitationStatus = {
 } as const
 
 export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
-
-
-export const ScheduleStatus = {
-  DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED'
-} as const
-
-export type ScheduleStatus = (typeof ScheduleStatus)[keyof typeof ScheduleStatus]

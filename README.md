@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SETUP
 
-## Getting Started
+1. To get started, run the `npm install` command in your terminal.
 
-First, run the development server:
+2. Then you setup a supabase account with your email
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+3. Navigate through `connect -> nextjs -> .env.local`
+   you copy-paste the two values `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` into the .env.local on the root of the project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Then navigate through `dashboard -> get connected(direct conneciton string)`. You are looking for the `direct connection` & `transaction pooler` strings. You will take the template of each and update the your password.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. You save `direction connection = DIRECT_URL` & `transaction pooler = DATABASE_URL` into the root .env file. Then you copy paste the "DATABASE_URL" into the .env.local file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+6. Last thing we need is the `dashboard -> api keys / settings/api keys -> secret keys` which we will save as `SUPBASE_SECRET_KEY` into the .env.local file.
 
-## Learn More
+<br>
 
-To learn more about Next.js, take a look at the following resources:
+# PRISMA
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. You delete `prisma/migrations` and `generated` folders.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. You run `npx prisma migrate dev --name init`.
 
-## Deploy on Vercel
+3. You run `npx prisma generate`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<br>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# TEST USER
+
+1. You run `npx tsx scripts/create-manager`.
+
+2. You run `npx tsx scripts/update-manager`.
+
+3. You run `npx tsx scripts/update-supabase`.

@@ -23,52 +23,17 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Company
+ * 
+ */
+export type Company = Prisma.CompanyModel
+/**
+ * Model Sale
+ * 
+ */
+export type Sale = Prisma.SaleModel
+/**
  * Model Invitation
  * 
  */
 export type Invitation = Prisma.InvitationModel
-/**
- * Model Area
- * 
- */
-export type Area = Prisma.AreaModel
-/**
- * Model Role
- * 
- */
-export type Role = Prisma.RoleModel
-/**
- * Model UserAreaRole
- * 
- */
-export type UserAreaRole = Prisma.UserAreaRoleModel
-/**
- * Model UserAvailability
- * 
- */
-export type UserAvailability = Prisma.UserAvailabilityModel
-/**
- * Model CoverageRequirement
- * 
- */
-export type CoverageRequirement = Prisma.CoverageRequirementModel
-/**
- * Model Schedule
- * 
- */
-export type Schedule = Prisma.ScheduleModel
-/**
- * Model Shift
- * 
- */
-export type Shift = Prisma.ShiftModel
-/**
- * Model Conversation
- * 
- */
-export type Conversation = Prisma.ConversationModel
-/**
- * Model Message
- * 
- */
-export type Message = Prisma.MessageModel

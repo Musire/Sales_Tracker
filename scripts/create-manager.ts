@@ -117,7 +117,7 @@ async function main() {
         authUserId: authUser.id,
         email,
         name,
-        role: "MANAGER",
+        role: "ADMIN",
         status: "ACTIVE",
         avatarUrl: ''
       },

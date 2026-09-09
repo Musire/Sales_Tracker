@@ -1,6 +1,8 @@
+import BottomDrawer from "@/components/bottomdrawer/BottomDrawer";
 import { Navbar } from "@/components/navbar";
 import PanelManager from "@/components/sidepanel/PanelManager";
 import { AuthProvider } from "@/context";
+import { BottomDrawerProvider } from "@/context/BottomDrawerProvider";
 import { SidePanelProvider } from "@/context/SidepanelProvider";
 import { ToastProvider } from "@/context/ToastContext";
 import { getCurrentUser } from "@/domains/identity/auth/session";
@@ -21,15 +23,18 @@ export default async function DashboardLayout ({ children }: Props) {
     return (
         <ToastProvider>
                 <AuthProvider fetchedRole={user.role}>
-                    <SidePanelProvider>
-                        <div className="bg-background text-main w-dvw h-dvh flex-col flex overflow-auto px-6 lg:px-60 relative">
-                            <Navbar role={user.role} />
-                            <div className="flex flex-1 overflow-x-hidden scrollbar-none pb-20 " >
-                                {children}
+                    <BottomDrawerProvider>
+                        <SidePanelProvider>
+                            <div className="bg-background text-main w-dvw h-dvh flex-col flex overflow-auto px-6 lg:px-60 relative">
+                                <Navbar role={user.role} />
+                                <div className="flex flex-1 overflow-x-hidden scrollbar-none pb-20 " >
+                                    {children}
+                                </div>
+                                <PanelManager />
+                                <BottomDrawer />
                             </div>
-                            <PanelManager />
-                        </div>
-                    </SidePanelProvider>
+                        </SidePanelProvider>
+                    </BottomDrawerProvider>
                 </AuthProvider>
         </ToastProvider>
     );

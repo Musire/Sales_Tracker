@@ -52,16 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Invitation: 'Invitation',
-  Area: 'Area',
-  Role: 'Role',
-  UserAreaRole: 'UserAreaRole',
-  UserAvailability: 'UserAvailability',
-  CoverageRequirement: 'CoverageRequirement',
-  Schedule: 'Schedule',
-  Shift: 'Shift',
-  Conversation: 'Conversation',
-  Message: 'Message'
+  Company: 'Company',
+  Sale: 'Sale',
+  Invitation: 'Invitation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -88,7 +81,7 @@ export const UserScalarFieldEnum = {
   avatarUrl: 'avatarUrl',
   role: 'role',
   status: 'status',
-  payRate: 'payRate',
+  companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -96,12 +89,44 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  architectId: 'architectId',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const SaleScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  createdById: 'createdById',
+  status: 'status',
+  customerName: 'customerName',
+  amount: 'amount',
+  notes: 'notes',
+  publishedAt: 'publishedAt',
+  closedAt: 'closedAt',
+  deliveredAt: 'deliveredAt',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
+
+
 export const InvitationScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  invitedById: 'invitedById',
   email: 'email',
+  role: 'role',
   status: 'status',
+  invitedById: 'invitedById',
+  userId: 'userId',
   expiresAt: 'expiresAt',
   acceptedAt: 'acceptedAt',
   createdAt: 'createdAt',
@@ -109,121 +134,6 @@ export const InvitationScalarFieldEnum = {
 } as const
 
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
-
-
-export const AreaScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  active: 'active',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AreaScalarFieldEnum = (typeof AreaScalarFieldEnum)[keyof typeof AreaScalarFieldEnum]
-
-
-export const RoleScalarFieldEnum = {
-  id: 'id',
-  areaId: 'areaId',
-  name: 'name',
-  active: 'active',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
-
-
-export const UserAreaRoleScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  areaId: 'areaId',
-  roleId: 'roleId',
-  createdAt: 'createdAt'
-} as const
-
-export type UserAreaRoleScalarFieldEnum = (typeof UserAreaRoleScalarFieldEnum)[keyof typeof UserAreaRoleScalarFieldEnum]
-
-
-export const UserAvailabilityScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  dayOfWeek: 'dayOfWeek',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  available: 'available',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserAvailabilityScalarFieldEnum = (typeof UserAvailabilityScalarFieldEnum)[keyof typeof UserAvailabilityScalarFieldEnum]
-
-
-export const CoverageRequirementScalarFieldEnum = {
-  id: 'id',
-  areaId: 'areaId',
-  roleId: 'roleId',
-  dayOfWeek: 'dayOfWeek',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  requiredUsers: 'requiredUsers',
-  active: 'active',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CoverageRequirementScalarFieldEnum = (typeof CoverageRequirementScalarFieldEnum)[keyof typeof CoverageRequirementScalarFieldEnum]
-
-
-export const ScheduleScalarFieldEnum = {
-  id: 'id',
-  weekStart: 'weekStart',
-  status: 'status',
-  publishedAt: 'publishedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
-
-
-export const ShiftScalarFieldEnum = {
-  id: 'id',
-  scheduleId: 'scheduleId',
-  userId: 'userId',
-  areaId: 'areaId',
-  roleId: 'roleId',
-  shiftDate: 'shiftDate',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ShiftScalarFieldEnum = (typeof ShiftScalarFieldEnum)[keyof typeof ShiftScalarFieldEnum]
-
-
-export const ConversationScalarFieldEnum = {
-  id: 'id',
-  managerId: 'managerId',
-  endUserId: 'endUserId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
-
-
-export const MessageScalarFieldEnum = {
-  id: 'id',
-  conversationId: 'conversationId',
-  senderId: 'senderId',
-  body: 'body',
-  createdAt: 'createdAt',
-  readAt: 'readAt'
-} as const
-
-export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,19 +1,18 @@
 'use client';
 
+import { useSidePanel } from '@/context/SidepanelProvider';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Caption } from '../typography';
 import { getIcon, IconKey } from './icon-map';
 import { NavItem } from './navconfig';
-import { useSidePanel } from '@/context/SidepanelProvider';
 
 interface MobileNavProps {
   items: NavItem[];
-  onOpenModal: () => void; // Added prop
 }
 
-export default function MobileNav({ items, onOpenModal }: MobileNavProps) {
+export default function MobileNav({ items }: MobileNavProps) {
   const pathname = usePathname();
   const {loadModal} = useSidePanel()
   if (!items.length) return null;

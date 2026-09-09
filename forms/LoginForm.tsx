@@ -15,7 +15,7 @@ export default function LoginPage() {
   });
 
   const onSuccess = () => {
-    router.push('/schedule')
+    router.push('/tinker')
   }
 
   return (
@@ -24,7 +24,7 @@ export default function LoginPage() {
       <h2 className="text-3xl text-main">Login Form</h2>
       <div className="surface-1 rounded-xl">
         <ActionForm 
-          initialValues={{ email: "", password: ""}}
+          initialValues={{ email: "manager@example.com", password: "ChangeThisPassword123!"}}
           actionFn={login}
           schema={schema}
           onSuccess={onSuccess}

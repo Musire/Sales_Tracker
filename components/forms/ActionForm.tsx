@@ -36,10 +36,10 @@ export default function ActionForm<T, S extends z.ZodObject<FieldValues>>({
     const form = useForm<z.infer<S>>({
       resolver: zodResolver(schema) as any, 
       defaultValues: initialValues,
-      mode: "onBlur"
+      mode: "onChange"
     });
 
-    const handleFormSubmit = async () => {
+    const onValidSubmit = async () => {
       const isValid = await form.trigger();
       if (!isValid) {
         console.log('Validation errors:', form.formState.errors);
@@ -76,15 +76,15 @@ export default function ActionForm<T, S extends z.ZodObject<FieldValues>>({
     return (
       <FormProvider {...form}>
         <FormStatusProvider state={state} pending={pending} >
-        <form
-          className="flex flex-col rounded-xl max-w-lg w-full p-6 stacked space-y-2"
-          action={handleFormSubmit}
-          >
-          {children}
-          {state.error && <p className="text-error text-sm">{state.error}</p>}
-          {!isMulti && <StatusButton isPending={pending} state={state} />}
-        </form>
-          </FormStatusProvider>
+          <form
+            className="flex flex-col rounded-xl max-w-lg w-full p-6 stacked space-y-2"
+            action={onValidSubmit}
+            >
+            {children}
+            {state.error && <p className="text-error text-sm">{state.error}</p>}
+            {!isMulti && <StatusButton isPending={pending} state={state} />}
+          </form>
+        </FormStatusProvider>
       </FormProvider>
     );
 }

@@ -9,14 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Company'
+export type * from './models/Sale'
 export type * from './models/Invitation'
-export type * from './models/Area'
-export type * from './models/Role'
-export type * from './models/UserAreaRole'
-export type * from './models/UserAvailability'
-export type * from './models/CoverageRequirement'
-export type * from './models/Schedule'
-export type * from './models/Shift'
-export type * from './models/Conversation'
-export type * from './models/Message'
 export type * from './commonInputTypes'

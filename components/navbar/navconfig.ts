@@ -8,35 +8,32 @@ export type NavItem = {
   isAction?: boolean // Flag to identify the modal button
 }
 
-export type Role = 'MANAGER' | 'ENDUSER' 
 
 export const navByRole: Record<UserRole, NavItem[]> = {
-  MANAGER: [
+  ADMIN: [
     { 
-      label: 'Schedule',
-      icon: 'schedule',
-      href: `/schedule`,
+      label: 'Home',
+      icon: 'home',
+      href: `/home`,
     },
     { 
-      label: 'Manage',
-      icon: 'manage',
-      href: `/manage/areas` 
-    },
-    {
-      label: 'Add',
-      icon: 'plus', 
-      isAction: true,
+      label: 'Architects',
+      icon: 'architects',
+      href: `/architects` 
     },
     { 
-      label: 'Messages',
-      icon: 'messages',
-      href: `/messages` 
+      label: 'Companies',
+      icon: 'companies',
+      href: `/companies` 
     },
     { 
       label: 'Account',
       icon: 'account',
       href: `/account` 
     },
+  ],
+  ARCHITECT: [
+
   ],
   END_USER: [
       { 
