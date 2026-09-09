@@ -10,7 +10,7 @@ import { Company, User } from "@/generated/prisma/client";
 import { useEffect, useState } from "react";
 
 type Props = {
-  data: Company
+  data?: Company
 }
 
 export default function CreateCompanyForm ({ data }: Props) {
@@ -18,8 +18,8 @@ export default function CreateCompanyForm ({ data }: Props) {
     const { clearModal } = useSidePanel()
     const [architects, setArchitects] = useState<User[]>([]);
     const defaultData = {
-        name: data.name,
-        architectId: data.architectId
+        name: data?.name ?? '',
+        architectId: data?.architectId ?? ''
     }
 
     const onSuccess = () => {
