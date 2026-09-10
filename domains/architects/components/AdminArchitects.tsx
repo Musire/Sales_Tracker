@@ -21,7 +21,7 @@ export default function AdminArchitect ({ architects }: Props) {
             >
                 + Add
             </button>
-            <ul className="flex-1 flex flex-col space-y-4 overflow-y-auto scrollbar-none w-full ">
+            <ul className="flex-1 flex flex-col space-y-4 overflow-y-auto scrollbar-adjust pr-4 w-full ">
                 {architects?.map((c) => (<ArchitectCard key={c.id} architect={c} />))}
             </ul>
         </AppPage>

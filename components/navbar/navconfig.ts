@@ -27,9 +27,14 @@ export const navByRole: Record<UserRole, NavItem[]> = {
       href: `/companies` 
     },
     { 
-      label: 'Account',
-      icon: 'account',
-      href: `/account` 
+      label: 'Brokers',
+      icon: 'brokers',
+      href: `/brokers` 
+    },
+    { 
+      label: 'Sales',
+      icon: 'sales',
+      href: `/sales` 
     },
   ],
   ARCHITECT: [

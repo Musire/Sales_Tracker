@@ -2,8 +2,10 @@ import type { LucideIcon } from 'lucide-react'
 import {
     Briefcase,
     DraftingCompass,
+    Handshake,
     Home,
-    UserShield
+    UserShield,
+    UsersRound
 } from 'lucide-react'
 
 export const iconMap = {
@@ -11,6 +13,8 @@ export const iconMap = {
     architects: DraftingCompass,
     companies: Briefcase,
     account: UserShield,
+    brokers: UsersRound,
+    sales: Handshake
 } as const
 
 export type IconKey = keyof typeof iconMap

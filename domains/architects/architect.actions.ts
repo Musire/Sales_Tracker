@@ -12,7 +12,7 @@ export const createArchitect = createSafeAction(
     },
     async (_:any, formData: FormData) => {
         const validated = validateFormData(ArchitectCreationSchema, formData)
-        const res = createArchitectService(validated)
+        const res = await createArchitectService(validated)
         revalidatePath('/architects')
         return res
     }
@@ -24,7 +24,7 @@ export const updateArchitect = createSafeAction(
     },
     async (_:any, formData: FormData) => {
         const validated = validateFormData(ArchitectUpdateSchema, formData)
-        const res = updateArchitectService(validated)
+        const res = await updateArchitectService(validated)
         revalidatePath('/architects')
         return res
     }
@@ -36,7 +36,7 @@ export const deleteArchitect = createSafeAction(
     },
     async (input: { id: string }) => {
         const validated = validateSchema(ArchitectDeleteSchema, input)
-        const res = deleteArchitectService(validated)
+        const res = await deleteArchitectService(validated)
         revalidatePath('/architects')
         return res
     }

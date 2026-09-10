@@ -11,4 +11,6 @@ export const PANEL_REGISTRY: Record<string, React.ComponentType<PanelProps>> = {
     'update-company': dynamic(() => import('@/forms/UpdateCompanyForm')),
     'create-architect': dynamic(() => import('@/forms/CreateArchitectForm')),
     'update-architect': dynamic(() => import('@/forms/UpdateArchitectForm')),
+    'create-broker': dynamic(() => import('@/forms/CreateBrokerForm')),
+    'update-broker': dynamic(() => import('@/forms/UpdateBrokerForm')),
 };

@@ -2,11 +2,10 @@
 
 import AppPage from "@/components/page/AppPage";
 import { useSidePanel } from "@/context/SidepanelProvider";
-import { Company } from "@/generated/prisma/client";
-import CompanyCard from "./CompanyCard";
+import CompanyCard, { CompanyWithMeta } from "./CompanyCard";
 
 type Props = {
-  companies: Company[]
+  companies: CompanyWithMeta[]
 }
 
 export default function AdminCompanies ({ companies }: Props) {
@@ -20,7 +19,7 @@ export default function AdminCompanies ({ companies }: Props) {
             >
                 + Add
             </button>
-            <ul className="flex-1 grid grid-cols-2 gap-4 overflow-y-auto scrollbar-none">
+            <ul className="flex-1 grid grid-cols-2 gap-4 overflow-y-auto scrollbar-adjust pr-4">
                 {companies?.map((c) => (<CompanyCard key={c.id} company={c} />))}
             </ul>
         </AppPage>

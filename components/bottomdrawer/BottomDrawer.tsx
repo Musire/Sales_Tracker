@@ -144,7 +144,7 @@ export default function BottomDrawer() {
                 </div>
 
                 {/* Dynamic Content Body Container with Fallback Diagnostics */}
-                <div className="overflow-y-auto flex-1 h-full w-full  p-6 pt-0 overscroll-contain">
+                <div className="overflow-y-auto flex-1 h-full w-full flex p-6 pt-0 overscroll-contain">
                     {ActiveComponent ? (
                         <ActiveComponent data={modalData} />
                     ) : (

@@ -72,7 +72,7 @@ export default function DropdownButton<T extends string>({
           <aside
             className={twMerge(
               clsx(
-                "absolute bg-background w-32 border border-adjust z-20 max-h-40 overflow-y-auto scrollbar-none top-12 rounded-xl",
+                "absolute bg-background min-w-32 border border-adjust z-20 max-h-40 overflow-y-auto scrollbar-none top-12 rounded-xl",
                 animation ? "animate-ghostIn" : "animate-ghostOut"
               ),
               drawerStyle

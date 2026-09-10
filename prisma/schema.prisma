@@ -89,7 +89,7 @@ model Company {
   name String
 
   // ARCHITECT responsible for this company
-  architectId String
+    String
 
   architect User? @relation("CompanyArchitect", fields: [architectId], references: [id], onDelete: SetNull)
 
