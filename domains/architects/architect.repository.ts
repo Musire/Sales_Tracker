@@ -1,13 +1,14 @@
-import { UserRole } from "@/generated/prisma/enums"
+import { UserRole, UserStatus } from "@/generated/prisma/enums"
 import { prisma } from "@/lib/prisma"
-import { ArchitectCreationType, ArchitectUpdateType } from "./architect.validations"
+import { ArchitectCreationType, ArchitectDeleteType, ArchitectUpdateType } from "./architect.validations"
 
 
 export const ArchitectRepository = {
     async getArchitects() {
         const architects = await prisma.user.findMany({
             where: {
-                role: 'ARCHITECT'
+                role: 'ARCHITECT',
+                status: UserStatus.ACTIVE
             }
         })
         return architects
@@ -33,4 +34,15 @@ export const ArchitectRepository = {
         })
         return architect
     },
+    async deleteArchitect(data: ArchitectDeleteType) {
+        const architect = await prisma.user.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                status: UserStatus.DISABLED
+            }
+        })
+        return architect
+    }
 }

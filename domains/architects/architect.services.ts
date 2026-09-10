@@ -1,5 +1,5 @@
 import { ArchitectRepository } from "./architect.repository";
-import { ArchitectCreationType, ArchitectUpdateType } from "./architect.validations";
+import { ArchitectCreationType, ArchitectDeleteType, ArchitectUpdateType } from "./architect.validations";
 
 
 export async function getArchitectService () {
@@ -12,4 +12,8 @@ export async function createArchitectService (data: ArchitectCreationType) {
 
 export async function updateArchitectService (data: ArchitectUpdateType) {
     ArchitectRepository.updateArchitect(data)
+}
+
+export async function deleteArchitectService (data: ArchitectDeleteType) {
+    return ArchitectRepository.deleteArchitect(data)
 }
