@@ -8,7 +8,9 @@ export const ArchitectRepository = {
         const architects = await prisma.user.findMany({
             where: {
                 role: 'ARCHITECT',
-                status: UserStatus.ACTIVE
+                status: {
+                    not: 'DISABLED'
+                }
             }
         })
         return architects
