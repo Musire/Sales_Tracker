@@ -89,7 +89,7 @@ model Company {
   name String
 
   // ARCHITECT responsible for this company
-    String
+  architectId  String
 
   architect User? @relation("CompanyArchitect", fields: [architectId], references: [id], onDelete: SetNull)
 
@@ -131,7 +131,7 @@ model Sale {
 
   customerName String?
 
-  amount Decimal? @db.Decimal(12, 2)
+  amount Decimal @db.Decimal(12, 2)
 
   notes String?
 

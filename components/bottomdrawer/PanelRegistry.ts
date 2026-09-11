@@ -8,5 +8,6 @@ export const PANEL_REGISTRY: Record<string, React.ComponentType<PanelProps>> = {
     'company-details': dynamic(() => import('@/domains/companies/components/CompanyDetails')),
     'architect-details': dynamic(() => import('@/domains/architects/components/ArchitectDetails')),
     'broker-details': dynamic(() => import('@/domains/brokers/components/BrokerDetails')),
+    'sale-details': dynamic(() => import('@/domains/sales/components/SaleDetails')),
 };
 
