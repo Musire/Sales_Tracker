@@ -39,6 +39,26 @@ export const BrokerRepository = {
         ])
         return { brokers, companies }
     },
+    async getBrokerDetails (id: string) {
+        const broker = prisma.user.findFirst({
+            where: { id },
+            include: {
+                company: {
+                    include: {
+                        architect: true, 
+                        _count: {
+                            select: {
+                                users: true,
+                                sales: true,
+                            },
+                        },
+                    },
+
+                },
+            },
+        })
+        return broker
+    },
     async createBroker (data: BrokerCreationType) {
 
     },

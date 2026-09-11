@@ -6,6 +6,10 @@ export async function getBrokerService () {
     return BrokerRepository.getBrokers()
 }
 
+export async function getBrokerDetailsService (id: string) {
+    return BrokerRepository.getBrokerDetails(id)
+}
+
 export async function createBrokerService (data: BrokerCreationType) {
     return BrokerRepository.createBroker(data)
 }

@@ -5,11 +5,11 @@ import { DeleteModal } from "@/components/modal";
 import { useToast } from "@/context";
 import { useBottomDrawer } from "@/context/BottomDrawerProvider";
 import { useSidePanel } from "@/context/SidepanelProvider";
+import { getCompanyDetails } from "@/domains/companies/company.queries";
 import { Company, User } from "@/generated/prisma/client";
 import { useDrawer } from "@/hooks";
 import { useTransition } from "react";
 import { deleteArchitect } from "../architect.actions";
-import { getCompanyDetails } from "@/domains/companies/company.queries";
 
 export type ArchitectWithMeta = User & {
   architectCompanies?: Company[];
@@ -20,7 +20,6 @@ type Props = {
 };
 
 export default function ArchitectDetails({ data }: Props) {
-  console.log(data)
   const [pending, startTransition] = useTransition();
   const { isMounted, closeDrawer, openDrawer } = useDrawer();
   const { clearModal: clearDrawer, loadModal: loadBottomDrawer } = useBottomDrawer();
