@@ -9,9 +9,23 @@ export const BrokerRepository = {
                 where: {
                     role: 'END_USER',
                     status: {
-                        not: 'DISABLED'
-                    }
-                }
+                    not: 'DISABLED',
+                    },
+                },
+                include: {
+                    company: {
+                        include: {
+                            architect: true, // Includes the full architect User record
+                            _count: {
+                                select: {
+                                    users: true,
+                                    sales: true,
+                                },
+                            },
+                        },
+
+                    },
+                },
             }),
             prisma.company.findMany({
                 where: {

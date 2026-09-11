@@ -1,10 +1,10 @@
 'use client'
 
 import { useBottomDrawer } from "@/context/BottomDrawerProvider";
-import { User } from "@/generated/prisma/client";
+import { Broker } from "./BrokerDetails";
 
 type Props = {
-  broker: User
+  broker: Broker
 }
 
 export default function BrokerCard ({ broker }: Props) {
@@ -12,7 +12,7 @@ export default function BrokerCard ({ broker }: Props) {
     
     return (
         <article 
-            onClick={() => loadModal('broker-details', broker)} 
+            onClick={() => loadModal('broker-details', { data: broker })} 
             className="bg-surface-1 border-border border p-4 h-24 w-full cursor-pointer flex items-center space-x-4 "
         >
             <div className="bg-surface-2 rounded-full size-16 " />

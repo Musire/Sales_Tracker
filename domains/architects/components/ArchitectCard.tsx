@@ -12,7 +12,7 @@ export default function ArchitectCard ({ architect }: Props) {
     
     return (
         <article 
-            onClick={() => loadModal('architect-details', architect)} 
+            onClick={() => loadModal('architect-details', { data: architect })} 
             className="bg-surface-1 border-border border p-4 h-24 w-full cursor-pointer flex items-center space-x-4 "
         >
             <div className="bg-surface-2 rounded-full size-16 " />

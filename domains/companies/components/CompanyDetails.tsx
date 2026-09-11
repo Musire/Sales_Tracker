@@ -4,6 +4,7 @@ import { useBottomDrawer } from "@/context/BottomDrawerProvider";
 import { useSidePanel } from "@/context/SidepanelProvider";
 import { useDrawer } from "@/hooks";
 import { CompanyWithMeta } from "./CompanyCard";
+import { getArchitectDetails } from "@/domains/architects/architect.queries";
 
 type Props = {
   data?: CompanyWithMeta
@@ -36,7 +37,11 @@ export default function CompanyDetails ({ data }: Props) {
                     <p className="">Architect</p>
                     <article 
                         className="flex items-center space-x-4 ml-4 cursor-pointer hover:bg-surface-1 p-4"
-                        onClick={() => loadBottomDrawer('architect-details', data?.architect)}
+                        onClick={
+                            () => loadBottomDrawer(
+                                'architect-details', 
+                                { fetchFn: () => getArchitectDetails(data?.architect?.id ?? '')  } 
+                        )}
                     >
                         <div className="size-16 bg-surface-2 rounded-full" />
                         <p className="flex flex-col space-y-2">
@@ -52,7 +57,7 @@ export default function CompanyDetails ({ data }: Props) {
                             return (
                                 <article
                                     key={d.id} 
-                                    onClick={() => loadBottomDrawer('broker-details', d)}
+                                    onClick={() => loadBottomDrawer('broker-details', { data: d })}
                                     className="cursor-pointer flex items-center space-x-4 ml-4  hover:bg-surface-1 p-4"
                                 >
                                     <div className="size-16 bg-surface-2 rounded-full" />

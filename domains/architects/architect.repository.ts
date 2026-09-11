@@ -11,9 +11,21 @@ export const ArchitectRepository = {
                 status: {
                     not: 'DISABLED'
                 }
-            }
+            },
+            include: {
+                architectCompanies: true,
+            },
         })
         return architects
+    },
+    async getArchitectDetails(id: string) {
+        const architect = await prisma.user.findFirst({
+            where: { id },
+            include: {
+                architectCompanies: true,
+            },
+        })
+        return architect
     },
     async createArchitect(data: ArchitectCreationType) {
         const architect = await prisma.user.create({

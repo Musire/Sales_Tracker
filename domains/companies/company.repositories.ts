@@ -32,6 +32,36 @@ export const CompanyRepository = {
         })
         return companies
     },
+    async getCompanyDetails (id: string) {
+        const company = await prisma.company.findFirst({
+            where: { id},
+            include: {
+                architect: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        avatarUrl: true,
+                    },
+                },
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        avatarUrl: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        users: true,
+                        sales: true,
+                    },
+                },
+            },
+        })
+        return company
+    },
     async createCompany(data: CompanyCreationType) {
         const company = await prisma.company.create({
             data

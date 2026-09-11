@@ -6,6 +6,10 @@ export async function getArchitectService () {
     return ArchitectRepository.getArchitects()
 }
 
+export async function getArchitectDetailsService (id: string) {
+    return ArchitectRepository.getArchitectDetails(id)
+}
+
 export async function createArchitectService (data: ArchitectCreationType) {
     ArchitectRepository.createArchitect(data)
 }

@@ -1,15 +1,17 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useMemo } from "react";
+import { LoadModalOptions, useDrawerState } from "./useDrawerState";
 
 type BottomDrawerContextType = {
   isOpen: boolean;
+  isLoading: boolean;
   currentModal: string | null;
-  loadModal: (id: string, data?: unknown) => void;
+  modalData: unknown;
+  loadModal: (id: string, options?: LoadModalOptions) => void;
   clearModal: () => void;
   openSidePanel: () => void;
   closeSidePanel: () => void;
-  modalData: unknown;
 };
 
 const BottomDrawerContext = createContext<BottomDrawerContextType | undefined>(undefined);
@@ -19,40 +21,20 @@ type BottomDrawerProviderProps = {
 };
 
 export function BottomDrawerProvider({ children }: BottomDrawerProviderProps) {
-  const [isOpen, setOpen] = useState<boolean>(false);
-  const [currentModal, setCurrentModal] = useState<string | null>(null);
-  const [modalData, setModalData] = useState<unknown>(null);
+  const drawerState = useDrawerState()
 
-  const openSidePanel = () => {
-    setOpen(true)
-  }
-
-  const closeSidePanel = () => {
-    setOpen(false)
-  }
-
-  const loadModal = (modal: string, data?: unknown) => {
-    setCurrentModal(modal);
-    setModalData(data);
-  };
-
-  const clearModal = () => {
-    setCurrentModal(null)
-    closeSidePanel()
-  };
-
+  const value = useMemo(() => drawerState, [
+    drawerState.isOpen,
+    drawerState.isLoading,
+    drawerState.currentModal,
+    drawerState.modalData,
+    drawerState.loadModal,
+    drawerState.clearModal,
+  ]);
 
   return (
     <BottomDrawerContext.Provider 
-      value={{ 
-        isOpen,
-        currentModal,
-        loadModal,
-        clearModal, 
-        openSidePanel, 
-        closeSidePanel,
-        modalData
-      }}
+      value={value}
     >
       {children}
     </BottomDrawerContext.Provider>
