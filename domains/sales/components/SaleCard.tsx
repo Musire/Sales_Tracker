@@ -40,7 +40,7 @@ export default function SaleCard({ sale }: Props) {
 
   return (
     <article
-      onClick={() => loadModal("sale-details", sale)}
+      onClick={() => loadModal("sale-details", {data: sale})}
       className="bg-surface-1 hover:bg-surface-2/50 border-border transition-colors border  p-4 w-full cursor-pointer flex items-center justify-between gap-4"
     >
       {/* Left: Avatar & Primary Info */}

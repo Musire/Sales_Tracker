@@ -5,19 +5,21 @@ import { DeleteModal } from "@/components/modal";
 import { useToast } from "@/context";
 import { useBottomDrawer } from "@/context/BottomDrawerProvider";
 import { useSidePanel } from "@/context/SidepanelProvider";
-import { Sale } from "@/generated/prisma/client";
+import { getArchitectDetails } from "@/domains/architects/architect.queries";
+import { getCompanyDetails } from "@/domains/companies/company.queries";
 import { useDrawer } from "@/hooks";
 import { useTransition } from "react";
 import { deleteSale } from "../sale.actions";
+import { SaleMutate } from "./AdminSales";
 
 type Props = {
-  data?: Sale
-}
+  data?: SaleMutate;
+};
 
 export default function SaleDetails ({ data }: Props) {
     const [pending, startTransition] = useTransition()
     const { isMounted, closeDrawer, openDrawer } = useDrawer()
-    const { clearModal: clearDrawer } = useBottomDrawer()
+    const { clearModal: clearDrawer, loadModal: loadBottomDrawer } = useBottomDrawer()
     const { loadModal } = useSidePanel()
     const { createSuccess, createError } = useToast()
 
@@ -47,11 +49,60 @@ export default function SaleDetails ({ data }: Props) {
 
     return (
         <>
-            <DrawerTemplate 
+            <DrawerTemplate
+                className="stacked space-y-4"
                 onEdit={handleEdit}
                 onDelete={openDrawer}
                 >
-                <p className="">{Number(data?.amount)}</p>
+                <div className="flex-col flex space-y-4">
+                    <p className="">Architect</p>
+                    <article 
+                        className="flex items-center space-x-4 ml-4 cursor-pointer hover:bg-surface-1 p-4"
+                        onClick={
+                            () => loadBottomDrawer(
+                                'architect-details', 
+                                { fetchFn: () => getArchitectDetails(data?.company?.architect?.id ?? '')  } 
+                        )}
+                    >
+                        <div className="size-16 bg-surface-2 rounded-full" />
+                        <p className="flex flex-col space-y-2">
+                            <span className="text-main">{data?.company?.architect?.name}</span>
+                            <span className="text-sm text-else">{data?.company?.architect?.email}</span>
+                        </p>
+                    </article>
+                </div>
+                <div className="flex-col flex space-y-4">
+                    <p className="">Company</p>
+                    <article 
+                        onClick={
+                            () => loadBottomDrawer(
+                                'company-details', 
+                                { fetchFn: () => getCompanyDetails(data?.company?.id ?? '') })} 
+                        className="bg-surface-1 h-24 shrink-0 border border-border p-4 cursor-pointer flex flex-col justify-between hover:bg-surface-2 transition-colors rounded-lg"
+                        >
+                        <p className="text-main font-semibold text-lg truncate">{data?.company?.name}</p>
+                        <p className="text-else text-sm">
+                            {`${data?.company?._count.users} brokers · ${data?.company?._count.sales} sales`}
+                        </p>
+                    </article>
+                </div>
+                <div className="flex-col flex space-y-4">
+                    <p className="">Architect</p>
+                    <article 
+                        className="flex items-center space-x-4 ml-4 cursor-pointer hover:bg-surface-1 p-4"
+                        onClick={
+                            () => loadBottomDrawer(
+                                'architect-details', 
+                                { fetchFn: () => getArchitectDetails(data?.company?.architect?.id ?? '')  } 
+                        )}
+                    >
+                        <div className="size-16 bg-surface-2 rounded-full" />
+                        <p className="flex flex-col space-y-2">
+                            <span className="text-main">{data?.company?.architect?.name}</span>
+                            <span className="text-sm text-else">{data?.company?.architect?.email}</span>
+                        </p>
+                    </article>
+                </div>
             </DrawerTemplate>
             <DeleteModal 
                 modalOpen={isMounted}

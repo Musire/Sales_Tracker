@@ -3,14 +3,26 @@
 import AppPage from "@/components/page/AppPage";
 import { useSidePanel } from "@/context/SidepanelProvider";
 import SaleCard from "./SaleCard";
-import { Sale } from "@/generated/prisma/client";
+import { Company, Sale, User } from "@/generated/prisma/client";
 
 export type SaleOverride = Omit<Sale, "amount"> & {
   amount: number;
 }
 
+export type CompanyExtended = Company & {
+  architect: User | null;
+  _count: {
+    users: Number;
+    sales: Number
+  }
+}
+
+export type SaleMutate = SaleOverride & {
+    company: CompanyExtended
+}
+
 type Props = {
-  sales: SaleOverride[]
+  sales: SaleMutate[]
 }
 
 export default function AdminSales ({ sales }: Props) {
