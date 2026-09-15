@@ -15,8 +15,8 @@ import { deleteBroker } from "../broker.actions";
 export type CompanyWithMeta = Company & {
   architect: User | null;
   _count: {
-    users: Number;
-    sales: Number
+    users: number;
+    sales: number
   }
 }
 

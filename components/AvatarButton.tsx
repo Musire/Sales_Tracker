@@ -1,12 +1,13 @@
 "use client";
 
-import { Drawer, Theme } from "@/components";
 import { logout } from "@/domains/identity/actions/auth.actions";
 import { useDrawer } from "@/hooks";
 import { LogOut, ShieldPlus, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./buttons";
+import Drawer from "./Drawer";
+import Theme from "./Theme";
 
 
 type Props = {

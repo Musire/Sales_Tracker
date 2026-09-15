@@ -1,4 +1,5 @@
 import { Building2 } from 'lucide-react';
+import Image from 'next/image';
 
 export interface CompanyRanking {
   rank: number;
@@ -63,7 +64,7 @@ export function CompanyRanking({ data }: Props) {
                     className="w-7 h-7 rounded-full bg-linear-to-tr from-background to-smoke text-white font-semibold text-[10px] flex items-center justify-center mx-auto border border-zinc-700 shadow-sm"
                   >
                     {company.architect.avatarUrl ? (
-                      <img 
+                      <Image 
                         src={company.architect.avatarUrl} 
                         alt={company.architect.name} 
                         className="w-full h-full rounded-full object-cover"

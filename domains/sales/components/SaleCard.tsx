@@ -3,6 +3,7 @@
 import { useBottomDrawer } from "@/context/BottomDrawerProvider";
 import { SaleStatus } from "@/generated/prisma/client";
 import { SaleOverride } from "./AdminSales";
+import Image from "next/image";
 
 // Extended type in case you include relations in your query
 type ExtendedSale = SaleOverride & {
@@ -47,7 +48,7 @@ export default function SaleCard({ sale }: Props) {
       <div className="flex items-center gap-3.5 min-w-0">
         <div className="bg-surface-2 rounded-full size-12 shrink-0 flex items-center justify-center overflow-hidden border border-border">
           {sale.createdBy?.avatarUrl ? (
-            <img
+            <Image
               src={sale.createdBy.avatarUrl}
               alt={sale.createdBy.name ?? "User"}
               className="size-full object-cover"

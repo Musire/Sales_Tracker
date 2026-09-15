@@ -1,17 +1,30 @@
 'use client';
+
 import { useSidePanel } from "@/context/SidepanelProvider";
 import { useEffect, useState } from "react";
 import { PANEL_REGISTRY } from "./PanelRegistry";
 
-export default function PanelManager () {
-    const { isOpen, currentModal, clearModal, modalData } = useSidePanel()
-    const [renderedModal, setRenderedModal] = useState(currentModal);
-    const ActiveComponent = currentModal ? PANEL_REGISTRY[currentModal] : null;
+export default function PanelManager() {
+    const { isOpen, currentModal, clearModal, modalData } = useSidePanel();
 
-    useEffect(() => {
+    // Track previous modal state to safely adjust state during render
+    const [prevModal, setPrevModal] = useState(currentModal);
+    const [renderedModal, setRenderedModal] = useState(currentModal);
+
+    // Adjust state during render phase to prevent synchronous effect setStates
+    if (currentModal !== prevModal) {
+        setPrevModal(currentModal);
         if (currentModal) {
             setRenderedModal(currentModal);
-        } else {
+        }
+    }
+
+    // Look up component based on renderedModal so it persists during exit animation
+    const ActiveComponent = renderedModal ? PANEL_REGISTRY[renderedModal] : null;
+
+    // Delayed unmount handler when currentModal becomes null
+    useEffect(() => {
+        if (!currentModal) {
             const timer = setTimeout(() => {
                 setRenderedModal(null);
             }, 300);

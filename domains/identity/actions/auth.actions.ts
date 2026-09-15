@@ -4,6 +4,7 @@ import { supabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient, createSupabaseServerClientReadOnly } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { validateFormData } from "../auth/safeAction";
+import { ActionResponse } from "../types";
 import { loginSchema } from "../validations/login.validations";
 
 export async function logout() {
@@ -21,7 +22,7 @@ export async function logout() {
 export type FormState = { success: boolean, error: string | null }
 
 
-export const login = async (_: any, formData: FormData) => {
+export const login = async (_: any, formData: FormData): Promise<ActionResponse<{ user: string }>> => {
     const validated = validateFormData(loginSchema, formData)
     const supabase = createSupabaseServerClient()
     const { error } = await supabase.auth.signInWithPassword({
@@ -31,12 +32,13 @@ export const login = async (_: any, formData: FormData) => {
     
     if (error) throw new Error('supabase error thrown')
     
+    // 💡 FIX: Removed 'error: null' and added 'as const' to strictly match the expected type
     return {
       success: true,
-      data: { user: 'test'},
-      error: null
-    }
+      data: { user: 'test'}
+    } as const;
 }
+
 
 export async function etest(
   _: any, 
@@ -98,26 +100,28 @@ export async function getCurrentUser() {
 }
 
 
-
 export async function signup(
-  _: FormState, 
+  _: any, // Changed to any to match your ActionForm parameter rules safely
   formData: FormData
-) {
+): Promise<ActionResponse<unknown>> {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
   const role = formData.get('role') as string
 
   if (!email || !password || !role) {
-    return { success: false, error: 'missing credentials'}
+    return { success: false, error: 'missing credentials' } as const;
   }
+
+  // 💡 FIX: Create a safe origin URL because 'location' does not exist on the server
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const supabase = createSupabaseServerClient()
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${location.origin}/auth/callback`,
+      emailRedirectTo: `${origin}/auth/callback`,
       data: {
         role,
         full_name: fullName
@@ -126,9 +130,12 @@ export async function signup(
   })
 
   if (error) {
-    return { success: false, error: error.message}
+    return { success: false, error: error.message } as const;
   }
 
-  return { success: true, error: null}
-
+  // 💡 FIX: Removed 'error: null' and added 'data: null' to match the ActionResponse format
+  return { 
+    success: true, 
+    data: null 
+  } as const;
 }

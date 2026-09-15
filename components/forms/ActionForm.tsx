@@ -14,7 +14,7 @@ interface FormProps<T, S extends z.ZodObject<FieldValues>> {
     initialValues: DefaultValues<z.infer<S>>; 
     isMulti?: boolean;
     children?: React.ReactNode;
-    actionFn: (_:any, formData: FormData) => ActionResponse<T> | Promise<ActionResponse<T>>;
+    actionFn: (_: any, formData: FormData) => ActionResponse<T> | Promise<ActionResponse<T>>;
     onSuccess?: () => void;
 }
 
@@ -27,11 +27,15 @@ export default function ActionForm<T, S extends z.ZodObject<FieldValues>>({
     children 
 }: FormProps<T, S>) {
     
-    const [state, formAction, pending] = useActionState(actionFn, { 
-        success: false, 
-        error: undefined,
-        data: null
-    });
+    // 💡 FIX: Cast the initial state object to the correct ActionResponse type so useActionState behaves correctly
+    const [state, formAction, pending] = useActionState(
+        actionFn, 
+        { 
+            success: false, 
+            error: undefined,
+            data: undefined // Using undefined fits standard optional typing better than null
+        } as ActionResponse<T>
+    );
 
     const form = useForm<z.infer<S>>({
       resolver: zodResolver(schema) as any, 
@@ -62,7 +66,11 @@ export default function ActionForm<T, S extends z.ZodObject<FieldValues>>({
     };
 
     const onSuccessRef = useRef(onSuccess);
-    onSuccessRef.current = onSuccess;
+
+    // Keep ref in sync safely inside an effect
+    useEffect(() => {
+      onSuccessRef.current = onSuccess;
+    }, [onSuccess]);
 
     useEffect(() => {
       // Check if the submission was successful
@@ -70,7 +78,6 @@ export default function ActionForm<T, S extends z.ZodObject<FieldValues>>({
         onSuccessRef.current?.();
         form.reset(); 
       }
-    // ONLY depend on state.success and the stable reset function
     }, [state.success, form]); 
 
     return (

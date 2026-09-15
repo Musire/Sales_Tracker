@@ -40,7 +40,7 @@ export default function CreateCompanyForm ({ data }: Props) {
             
         }
         fetchData()
-    }, [getArchitects])
+    }, [])
 
 
     return (

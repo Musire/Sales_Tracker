@@ -6,14 +6,26 @@ import { PANEL_REGISTRY } from "./PanelRegistry";
 
 export default function BottomDrawer() {
     const { isOpen, currentModal, clearModal, modalData } = useBottomDrawer();
-    const [renderedModal, setRenderedModal] = useState(currentModal);
-    const [isVisible, setIsVisible] = useState(false);
     
+    // 1. Keep track of the active modal for the exit animation
+    const [renderedModal, setRenderedModal] = useState(currentModal);
+
+    // 2. Track visibility state for the slide up/down animation
+    const [animatingVisible, setAnimatingVisible] = useState(false);
+
+    // Sync renderedModal when currentModal opens
+    if (currentModal && currentModal !== renderedModal) {
+        setRenderedModal(currentModal);
+    }
+
+    // Derive visibility: It should animate open if we have a currentModal
+    const isVisible = Boolean(currentModal) && animatingVisible;
+
     // Dragging state variables
     const [dragOffset, setDragOffset] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
-    
-    // Mutable refs for high-frequency touch event calculations
+
+    // Dynamic refs
     const isDraggingRef = useRef(false);
     const startYRef = useRef(0);
     const currentOffsetRef = useRef(0);
@@ -25,18 +37,14 @@ export default function BottomDrawer() {
     // --- Animation & Paint Syncing ---
     useEffect(() => {
         if (currentModal) {
-            setRenderedModal(currentModal);
-            setDragOffset(0);
             currentOffsetRef.current = 0;
+            requestAnimationFrame(() => setDragOffset(0));
 
-            // Double requestAnimationFrame forces mobile browsers to paint 
-            // the translate3d(0, 100%, 0) state prior to triggering the slide-up transition
-            let animFrame1: number;
+            // Double rAF forces mobile browsers to paint before slide-up
             let animFrame2: number;
-
-            animFrame1 = requestAnimationFrame(() => {
+            const animFrame1 = requestAnimationFrame(() => {
                 animFrame2 = requestAnimationFrame(() => {
-                    setIsVisible(true);
+                    setAnimatingVisible(true);
                 });
             });
 
@@ -45,10 +53,12 @@ export default function BottomDrawer() {
                 cancelAnimationFrame(animFrame2);
             };
         } else {
-            setIsVisible(false);
+            // FIX: We queue the state updates so they aren't synchronous inside the effect body
             const timer = setTimeout(() => {
+                setAnimatingVisible(false);
                 setRenderedModal(null);
-            }, 300);
+            }, 300); // Match your 300ms CSS transition time
+            
             return () => clearTimeout(timer);
         }
     }, [currentModal]);
@@ -62,11 +72,10 @@ export default function BottomDrawer() {
 
     const handleTouchMove = useCallback((e: TouchEvent | MouseEvent) => {
         if (!isDraggingRef.current) return;
-        
+
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
         const deltaY = clientY - startYRef.current;
-        
-        // Prevent background pulling on mobile Safari / Chrome
+
         if (e.cancelable) e.preventDefault();
 
         if (deltaY >= 0) {
@@ -77,13 +86,12 @@ export default function BottomDrawer() {
 
     const handleTouchEnd = useCallback(() => {
         if (!isDraggingRef.current) return;
-        
+
         isDraggingRef.current = false;
         setIsDragging(false);
 
         if (drawerRef.current) {
             const drawerHeight = drawerRef.current.offsetHeight;
-            // Clear modal if dragged down past 30% of height
             if (currentOffsetRef.current > drawerHeight * 0.3) {
                 clearModal();
             } else {
@@ -93,7 +101,6 @@ export default function BottomDrawer() {
         }
     }, [clearModal]);
 
-    // Attach global listeners during drag cycles so rapid gestures don't drop target focus
     useEffect(() => {
         if (!isDragging) return;
 
@@ -118,10 +125,9 @@ export default function BottomDrawer() {
 
     return (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
-            {/* Backdrop click to close */}
             <div className="absolute inset-0" onClick={clearModal} />
 
-            <aside 
+            <aside
                 ref={drawerRef}
                 style={{
                     transform: isDragging
@@ -132,10 +138,9 @@ export default function BottomDrawer() {
                     transition: isDragging ? "none" : "transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
                     willChange: "transform",
                 }}
-                className="fixed bottom-0 z-50 border border-border w-full md:max-w-xl bg-background rounded-t-2xl shadow-2xl flex flex-col  max-h-[85dvh] overflow-hidden"
+                className="fixed bottom-0 z-50 border border-border w-full md:max-w-xl bg-background rounded-t-2xl shadow-2xl flex flex-col max-h-[85dvh] overflow-hidden"
             >
-                {/* Drag Handle Zone */}
-                <div 
+                <div
                     className="w-full flex justify-center py-4 cursor-grab active:cursor-grabbing touch-none select-none shrink-0"
                     onTouchStart={(e) => handleTouchStart(e.touches[0].clientY)}
                     onMouseDown={(e) => handleTouchStart(e.clientY)}
@@ -143,7 +148,6 @@ export default function BottomDrawer() {
                     <div className="w-12 h-1.5 bg-muted-foreground/30 rounded-full" />
                 </div>
 
-                {/* Dynamic Content Body Container with Fallback Diagnostics */}
                 <div className="overflow-y-auto flex-1 h-full w-full flex p-6 pt-0 overscroll-contain">
                     {ActiveComponent ? (
                         <ActiveComponent data={modalData} />

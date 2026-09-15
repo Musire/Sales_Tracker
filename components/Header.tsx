@@ -1,7 +1,7 @@
 "use client";
 
-import { AvatarButton } from "@/components";
 import { useHeaderTitle } from "@/hooks";
+import AvatarButton from "./AvatarButton";
 import { BackButton } from "./buttons";
 
 type Props = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { KeyboardEvent, MouseEvent, ReactNode, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface ModalProps {
@@ -11,18 +11,23 @@ interface ModalProps {
 }
 
 export default function Modal({ children, isOpen, onClose, title }: ModalProps) {
-    const [mounted, setMounted] = useState(false);
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
 
+    // Sync portal container safely after mounting completes
     useEffect(() => {
-        setMounted(true);
-        // Target your custom ID here
-        const container = document.getElementById("portal-root");
-        setPortalContainer(container);
+        // requestAnimationFrame pushes the look-up and state change to the next visual paint loop
+        const frameId = requestAnimationFrame(() => {
+            const container = document.getElementById("portal-root");
+            if (container) {
+                setPortalContainer(container);
+            }
+        });
+
+        return () => cancelAnimationFrame(frameId);
     }, []);
 
     useEffect(() => {
-        const handleEsc = (e: KeyboardEvent | any) => {
+        const handleEsc = (e: globalThis.KeyboardEvent) => {
             if (e.key === "Escape") onClose();
         };
 
@@ -34,8 +39,8 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
         if (e.target === e.currentTarget) onClose();
     };
 
-    // Prevent SSR hydration mismatch and ensure portal container exists
-    if (!mounted || !portalContainer) return null;
+    // Return null during SSR and initial hydration until the container is resolved
+    if (!portalContainer) return null;
 
     return createPortal(
         <div

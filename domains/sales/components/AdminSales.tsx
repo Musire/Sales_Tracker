@@ -12,8 +12,8 @@ export type SaleOverride = Omit<Sale, "amount"> & {
 export type CompanyExtended = Company & {
   architect: User | null;
   _count: {
-    users: Number;
-    sales: Number
+    users: number;
+    sales: number
   }
 }
 
