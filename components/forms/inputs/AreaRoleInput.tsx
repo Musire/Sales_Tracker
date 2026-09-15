@@ -11,7 +11,7 @@ type Props = {
       id: string;
       name: string;
     }[];
-  }[]; // Make sure this is an array
+  }[]; 
 };
 
 export default function AreaRoleInput({ areaRoles }: Props) {

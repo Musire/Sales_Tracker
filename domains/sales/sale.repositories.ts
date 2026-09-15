@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { SaleCreationType, SaleDeleteType, SaleUpdateType } from "./sale.validations";
+import { CompleteSaleCreationType, SaleDeleteType, SaleUpdateType, UpdateSaleStatusType } from "./sale.validations";
 
 
 export const SaleRepository = {
@@ -51,11 +51,14 @@ export const SaleRepository = {
             amount: sale.amount.toNumber(),
         }
     },
-    async createSale (data: SaleCreationType) {
+    async createSale (data: CompleteSaleCreationType) {
         const sale = await prisma.sale.create({
             data
         })
-        return sale
+        return {
+            ...sale,
+            amount: sale.amount.toNumber()
+        }
     },
     async updateSale (data: SaleUpdateType) {
         const {id, ...rest} = data
@@ -74,6 +77,22 @@ export const SaleRepository = {
                 active: false
             }
         })
-        return sale
+        return {
+            ...sale,
+            amount: sale.amount.toNumber()
+        }
     },
+    async updateSaleStatus (data: UpdateSaleStatusType) {
+        const sale = await prisma.sale.update({
+            where: { id: data.id },
+            data: {
+                status: data.newStatus
+            }
+        })
+
+        return {
+            ...sale,
+            amount: sale.amount.toNumber()
+        }
+    }
 }

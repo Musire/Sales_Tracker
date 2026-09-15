@@ -11,6 +11,7 @@ import { useDrawer } from "@/hooks";
 import { useTransition } from "react";
 import { deleteSale } from "../sale.actions";
 import { SaleMutate } from "./AdminSales";
+import UpdateButtons from "./UpdateButtons";
 
 type Props = {
   data?: SaleMutate;
@@ -47,6 +48,13 @@ export default function SaleDetails ({ data }: Props) {
         clearDrawer()
     }
 
+    if (!data) {
+        return (
+            <p className="">no data</p>
+        )
+    }
+
+
     return (
         <>
             <DrawerTemplate
@@ -54,6 +62,7 @@ export default function SaleDetails ({ data }: Props) {
                 onEdit={handleEdit}
                 onDelete={openDrawer}
                 >
+                <UpdateButtons saleId={data.id} status={data.status} onSuccess={clearDrawer} />
                 <div className="flex-col flex space-y-4">
                     <p className="">Architect</p>
                     <article 

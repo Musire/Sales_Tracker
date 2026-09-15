@@ -6,12 +6,18 @@ import { useDrawer } from "@/hooks";
 import { CompanyWithMeta } from "./CompanyCard";
 import { getArchitectDetails } from "@/domains/architects/architect.queries";
 import { getBrokerDetails } from "@/domains/brokers/broker.queries";
+import { startTransition, useTransition } from "react";
+import { deleteCompany } from "../company.actions";
+import { useToast } from "@/context";
+import { createCookiesWithMutableAccessCheck } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 type Props = {
   data?: CompanyWithMeta
 }
 
 export default function CompanyDetails ({ data }: Props) {
+    const [isPending, startTransition] = useTransition()
+    const { createSuccess, createError } = useToast()
     const { isMounted, closeDrawer, openDrawer } = useDrawer()
     const { clearModal: clearDrawer, loadModal: loadBottomDrawer } = useBottomDrawer()
     const { loadModal } = useSidePanel()
@@ -24,6 +30,18 @@ export default function CompanyDetails ({ data }: Props) {
 
     const handleDelete = () => { 
         console.log('delete from company details')
+        startTransition(async() => {
+            const res = await deleteCompany(data?.id ?? '')
+
+            if (!res.success && res.error) {
+                createError(res.error)
+                return
+            }
+
+            if (res.success) {
+                createSuccess('Company successfully deleted')
+            }
+        })
         clearDrawer()
     }
 

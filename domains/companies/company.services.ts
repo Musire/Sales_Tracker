@@ -10,6 +10,10 @@ export async function getCompanyDetailsService (id: string) {
     return CompanyRepository.getCompanyDetails(id)
 }
 
+export async function getCompanyBrokersService () {
+    return CompanyRepository.getCompanyBrokers()
+}
+
 export async function createCompanyService (data: CompanyCreationType) {
     return CompanyRepository.createCompany(data)
 }

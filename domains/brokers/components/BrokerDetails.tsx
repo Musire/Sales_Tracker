@@ -49,7 +49,7 @@ export default function BrokerDetails ({ data }: Props) {
         
         startTransition(async() => {
             if (data?.id) {
-                const res = await deleteBroker({id: data?.id})
+                const res = await deleteBroker({id: data?.id ?? ''})
                 if (!res.success && res.error) {
                     createError(res.error)
                     return

@@ -1,42 +1,61 @@
 'use client';
+
 import { ActionForm, Input } from "@/components/forms";
+import CompanyBrokerInput from "@/components/forms/inputs/CompanyBrokerInput";
 import { useToast } from "@/context";
 import { useSidePanel } from "@/context/SidepanelProvider";
+import { getCompanyBrokers } from "@/domains/companies/company.queries";
 import { createSale } from "@/domains/sales/sale.actions";
-import { SaleCreationSchema } from "@/domains/sales/sale.validations";
-
+import { CompleteCreationSchema } from "@/domains/sales/sale.validations";
+import { useFetch } from "@/hooks/useFetch";
+import { useEffect } from "react";
 
 export default function CreateSaleForm () {
     const { createSuccess } = useToast()
     const { clearModal } = useSidePanel()
+    const { isPending, data: companyBrokers , error, execute: fetchCompanyBrokers } = useFetch(getCompanyBrokers)
+
+    useEffect(() => {
+        fetchCompanyBrokers()
+    }, [fetchCompanyBrokers])
 
     const defaultData = {
-        name: '',
-        email: ''
+        customerName: '',
+        amount: 0,
+        notes: '',
+        companyId: '',
+        createdById: '',
     }
 
     const onSuccess = () => {
-        createSuccess('Architect created successfully')
+        createSuccess('Sale created successfully')
         clearModal()
     }
-
 
     return (
         <div className=" flex-1 centered-col space-y-4">
             <h2 className="text-xl">Create Sale</h2>
             <ActionForm
-                schema={SaleCreationSchema}
+                schema={CompleteCreationSchema}
                 initialValues={defaultData}
                 actionFn={createSale}
                 onSuccess={onSuccess}
             >
                 <Input 
-                    label="architect name"
-                    name="name"
+                    label="customer name"
+                    name="customerName"
                 />
                 <Input 
-                    label="email address"
-                    name="email"
+                    label="amount"
+                    name="amount"
+                    type="number"
+                />
+                <Input 
+                    label="notes"
+                    name="notes"
+                />
+                <CompanyBrokerInput 
+                    companies={companyBrokers ?? []}
                 />
             </ActionForm>
         </div>

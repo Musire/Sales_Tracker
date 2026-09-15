@@ -2,19 +2,13 @@
 
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
-interface StageData {
+export interface StageData {
   stage: string;
   count: number;
   percentage: number;
   color: string;
 }
 
-const data: StageData[] = [
-  { stage: 'Draft', count: 18, percentage: 15, color: '#52525b' },
-  { stage: 'Published', count: 31, percentage: 25, color: '#3b82f6' },
-  { stage: 'Closed', count: 43, percentage: 35, color: '#10b981' },
-  { stage: 'Delivered', count: 31, percentage: 25, color: '#f59e0b' },
-];
 
 const CustomBar = (props: any) => {
   const { x, y, width, height, payload } = props;
@@ -32,7 +26,11 @@ const CustomBar = (props: any) => {
   );
 };
 
-export function SalesLifecycle() {
+type Props = {
+  data: StageData[] 
+}
+
+export function SalesLifecycle({ data }: Props) {
   return (
     <div className="w-full bg-surface-1 p-4 rounded-xl border border-border">
       {/* Header with Calendar Range Selector */}

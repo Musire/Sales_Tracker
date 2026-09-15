@@ -1,7 +1,8 @@
 'use client';
 
+import { useDrawerState } from "@/hooks/useDrawerState";
+import { LoadModalOptions } from "@/hooks/useFetchState";
 import { createContext, ReactNode, useContext, useMemo } from "react";
-import { LoadModalOptions, useDrawerState } from "./useDrawerState";
 
 type BottomDrawerContextType = {
   isOpen: boolean;
@@ -21,16 +22,39 @@ type BottomDrawerProviderProps = {
 };
 
 export function BottomDrawerProvider({ children }: BottomDrawerProviderProps) {
-  const drawerState = useDrawerState()
+  const {
+    isOpen,
+    isLoading,
+    currentModal,
+    modalData,
+    loadModal,
+    clearModal,
+    openSidePanel,
+    closeSidePanel,
+  } = useDrawerState();
 
-  const value = useMemo(() => drawerState, [
-    drawerState.isOpen,
-    drawerState.isLoading,
-    drawerState.currentModal,
-    drawerState.modalData,
-    drawerState.loadModal,
-    drawerState.clearModal,
-  ]);
+  const value = useMemo(
+    () => ({
+      isOpen,
+      isLoading,
+      currentModal,
+      modalData,
+      loadModal,
+      clearModal,
+      openSidePanel,
+      closeSidePanel,
+    }),
+    [
+      isOpen,
+      isLoading,
+      currentModal,
+      modalData,
+      loadModal,
+      clearModal,
+      openSidePanel,
+      closeSidePanel,
+    ]
+  );
 
   return (
     <BottomDrawerContext.Provider 

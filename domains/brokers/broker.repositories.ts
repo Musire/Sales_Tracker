@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { BrokerCreationType, BrokerDeleteType, BrokerUpdateType } from "./broker.validations"
+import { UserRole, UserStatus } from "@/generated/prisma/enums"
 
 
 export const BrokerRepository = {
@@ -59,12 +60,32 @@ export const BrokerRepository = {
         return broker
     },
     async createBroker (data: BrokerCreationType) {
-
+        console.log(data)
+        const broker = await prisma.user.create({
+            data: {
+                name: data.name,
+                email: data.email,
+                companyId: data.companyId,
+                role: UserRole.END_USER
+            }
+        })
+        return broker
     },
     async updateBroker (data: BrokerUpdateType) {
-
+        const {id, ...rest} = data
+        const broker = await prisma.user.update({
+            where: { id },
+            data: rest
+        })
+        return broker
     },
     async deleteBroker (data: BrokerDeleteType) {
-
+        const broker = await prisma.user.update({
+            where: { id: data.id },
+            data: {
+                status: UserStatus.DISABLED
+            }
+        })
+        return broker
     },
 }

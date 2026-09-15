@@ -5,6 +5,9 @@ import { CompanyCreationType, CompanyDeleteType, CompanyUpdateType } from "./com
 export const CompanyRepository = {
     async getCompanies() {
         const companies = await prisma.company.findMany({
+            where: {
+                active: true,
+            },
             include: {
                 architect: {
                     select: {
@@ -61,6 +64,28 @@ export const CompanyRepository = {
             },
         })
         return company
+    },
+    async getCompanyBrokers() {
+        const companies = await prisma.company.findMany({
+            where: {
+                active: true,
+                users: {
+                    some: {},
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                users: {
+                    select: {
+                    id: true,
+                    name: true,
+                    },
+                },
+            },
+        });
+
+        return companies;
     },
     async createCompany(data: CompanyCreationType) {
         const company = await prisma.company.create({

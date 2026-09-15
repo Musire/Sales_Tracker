@@ -1,22 +1,9 @@
 import { formatActionError } from "@/lib/utils/formatError";
 import z from "zod";
 import { getCurrentUser } from "../actions/auth.actions";
-import { ActionResponse, ActionResult, SecureActionConfig } from "../types";
+import { ActionResponse, SecureActionConfig } from "../types";
 
-export async function safeAction<T>(
-  handler: () => T | Promise<T>
-): Promise<ActionResult<T>> {
-  try {
-    const data = await handler();
-    return {
-      success: true,
-      data,
-    };
-  } catch (error: unknown) {
-    // Uses your helper to consistently format and return the error state
-    return formatActionError(error);
-  }
-}
+
 
 export function createSafeAction<Args extends any[], Output>(
   config: SecureActionConfig,

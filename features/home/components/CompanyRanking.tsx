@@ -1,6 +1,6 @@
 import { Building2 } from 'lucide-react';
 
-interface CompanyRanking {
+export interface CompanyRanking {
   rank: number;
   name: string;
   revenue: string;
@@ -11,64 +11,12 @@ interface CompanyRanking {
   };
 }
 
-const COMPANIES: CompanyRanking[] = [
-  {
-    rank: 1,
-    name: 'Zenith Industries',
-    revenue: '$3.4M',
-    architect: { name: 'John Doe', initials: 'JD' },
-  },
-  {
-    rank: 2,
-    name: 'Globex Corp',
-    revenue: '$2.3M',
-    architect: { name: 'Sarah Chen', initials: 'SC' },
-  },
-  {
-    rank: 3,
-    name: 'Acme Corp',
-    revenue: '$1.2M',
-    architect: { name: 'John Doe', initials: 'JD' },
-  },
-  {
-    rank: 4,
-    name: 'Initech LLC',
-    revenue: '$950K',
-    architect: { name: 'Marcus Vance', initials: 'MV' },
-  },
-  {
-    rank: 5,
-    name: 'Umbrella Corp',
-    revenue: '$820K',
-    architect: { name: 'Elena Rostova', initials: 'ER' },
-  },
-  {
-    rank: 6,
-    name: 'Soylent Green Co',
-    revenue: '$710K',
-    architect: { name: 'Sarah Chen', initials: 'SC' },
-  },
-  {
-    rank: 7,
-    name: 'Hooli Inc',
-    revenue: '$650K',
-    architect: { name: 'David Kim', initials: 'DK' },
-  },
-  {
-    rank: 8,
-    name: 'Vehement Capital',
-    revenue: '$480K',
-    architect: { name: 'John Doe', initials: 'JD' },
-  },
-  {
-    rank: 9,
-    name: 'Massive Dynamic',
-    revenue: '$320K',
-    architect: { name: 'Amara Okafor', initials: 'AO' },
-  },
-];
+type Props = {
+  data: CompanyRanking[]
+}
 
-export function CompanyRanking() {
+
+export function CompanyRanking({ data }: Props) {
   return (
     <div className="bg-surface-1 flex-1 overflow-hidden rounded-xl p-4 border border-border flex flex-col">
       {/* Header */}
@@ -91,7 +39,7 @@ export function CompanyRanking() {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800/50 text-xs">
-            {COMPANIES.map((company) => (
+            {data.map((company) => (
               <tr key={company.rank} className="hover:bg-zinc-800/30 transition-colors">
                 {/* Rank */}
                 <td className="py-2.5 pr-2 text-center font-bold text-else">

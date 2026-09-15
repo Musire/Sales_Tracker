@@ -3,7 +3,7 @@
 import { supabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient, createSupabaseServerClientReadOnly } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { createSafeAction, validateFormData } from "../auth/safeAction";
+import { validateFormData } from "../auth/safeAction";
 import { loginSchema } from "../validations/login.validations";
 
 export async function logout() {
