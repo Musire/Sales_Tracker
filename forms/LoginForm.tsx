@@ -15,7 +15,7 @@ export default function LoginPage() {
   });
 
   const onSuccess = () => {
-    router.push('/tinker')
+    router.push('/home')
   }
 
   return (
